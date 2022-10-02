@@ -100,8 +100,7 @@
             this.box_WebBrowserChrome.Name = "box_WebBrowserChrome";
             this.box_WebBrowserChrome.Size = new System.Drawing.Size(1749, 1048);
             this.box_WebBrowserChrome.TabIndex = 6;
-            this.box_WebBrowserChrome.AddressChanged += new System.EventHandler<CefSharp.AddressChangedEventArgs>(this.box_WebBrowserChrome_AddressChanged);
-            // 
+
             // WindowForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
