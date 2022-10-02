@@ -46,7 +46,7 @@
             this.box_search_address.Name = "box_search_address";
             this.box_search_address.Size = new System.Drawing.Size(1442, 50);
             this.box_search_address.TabIndex = 0;
-            this.box_search_address.Text = "http://bаnkwebsite.com:4400";
+            this.box_search_address.Text = "http://bаnkwebsite.com:4500";
             this.box_search_address.KeyDown += new System.Windows.Forms.KeyEventHandler(this.box_search_address_KeyDown);
             // 
             // btn_search
@@ -100,7 +100,7 @@
             this.box_WebBrowserChrome.Name = "box_WebBrowserChrome";
             this.box_WebBrowserChrome.Size = new System.Drawing.Size(1749, 1048);
             this.box_WebBrowserChrome.TabIndex = 6;
-
+            // 
             // WindowForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
