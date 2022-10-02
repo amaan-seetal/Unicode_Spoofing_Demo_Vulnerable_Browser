@@ -49,12 +49,12 @@ namespace VulSimpleBrowser
             // ---------------------------------------------------------------
             // UNSAFE NAVIGATION
             // ---------------------------------------------------------------
-            //navigate_unsafely(browser_url);
+            navigate_unsafely(browser_url);
 
             // ---------------------------------------------------------------
             // SAFE NAVIGATION (PUNY-CODE)
             // ---------------------------------------------------------------
-            navigate_safely(browser_url);
+            //navigate_safely(browser_url);
 
         }
 
@@ -144,45 +144,6 @@ namespace VulSimpleBrowser
                 navigate_unsafely(browser_url);
             }
         }
-
-
-
-        /*************************************************************************
-        * DELEGATE - Update displayed URL as the webbrowser refreshes, goBack, ...
-        *************************************************************************/
-        private void box_WebBrowserChrome_AddressChanged(object sender, AddressChangedEventArgs e)
-        {            
-            if (this.box_search_address.InvokeRequired)
-            {
-                // If this method is running on a different thread
-                SetTextCallback d = new SetTextCallback(SetText);
-                this.Invoke(d, new object[] { e.Address.ToString() });
-            }
-            else
-            {
-                // It's on the same thread, no need for Invoke
-                this.box_search_address.Text = e.Address.ToString();
-            }
-        }
-
-
-
-
-        /*************************************************************************
-        * DELEGATE - Update UI from another thread
-        *************************************************************************/
-        delegate void SetTextCallback(string text);
-
-
-
-        /*************************************************************************
-        * DELEGATE - Change text of address box
-        *************************************************************************/
-        private void SetText(string text)
-        {
-            this.box_search_address.Text = text;
-        }
-
 
 
     } // class
