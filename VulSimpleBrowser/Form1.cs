@@ -1,0 +1,203 @@
+﻿using CefSharp;
+using System;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+
+
+/**
+ * Real - 127.0.0.1 bankwebsite.com
+ * Fake - 127.0.0.1 bаnkwebsite.com
+ */
+
+namespace VulSimpleBrowser
+{
+    public partial class WindowForm : Form
+    {
+        public WindowForm()
+        {
+            InitializeComponent();
+            
+            // Prevent black band on web browser :
+            Cef.EnableHighDPISupport();
+
+
+            // Open as maximised window :
+            //WindowState = FormWindowState.Maximized;
+
+
+            var bitness = RuntimeInformation.ProcessArchitecture.ToString().ToLowerInvariant();
+            var version = String.Format("Chromium: {0}, CEF: {1}, CefSharp: {2}, Environment: {3}", Cef.ChromiumVersion, Cef.CefVersion, Cef.CefSharpVersion, bitness);
+            
+
+            // Only perform layout when control has completly finished resizing
+            ResizeBegin += (s, e) => SuspendLayout();
+            ResizeEnd   += (s, e) => ResumeLayout(true);
+        }
+
+
+
+        /*************************************************************************
+        * BUTTON EVENT - Search
+        *************************************************************************/
+        private void btn_search_Click(object sender, EventArgs e)
+        {
+            // Get webpage address :
+            string browser_url = box_search_address.Text.Trim();
+
+
+            // ---------------------------------------------------------------
+            // UNSAFE NAVIGATION
+            // ---------------------------------------------------------------
+            //navigate_unsafely(browser_url);
+
+            // ---------------------------------------------------------------
+            // SAFE NAVIGATION (PUNY-CODE)
+            // ---------------------------------------------------------------
+            navigate_safely(browser_url);
+
+        }
+
+
+
+        /*************************************************************************
+        * FUNCTION - Navigate UnSafely
+        *************************************************************************/
+        private void navigate_unsafely(string browser_url)
+        {
+            box_WebBrowserChrome.Load(browser_url);
+        }
+
+
+        /*************************************************************************
+        * FUNCTION - Navigate Safely
+        *************************************************************************/
+        private void navigate_safely(string browser_url)
+        {
+
+            // Navigate to page :
+            box_WebBrowserChrome.Load(browser_url);
+
+            try
+            {
+                // Use puny-code to convert unicode chars to ascii :
+                IdnMapping idn = new IdnMapping();
+                browser_url = idn.GetAscii(browser_url);
+
+                // Replace address with the punycode for the user to see and check :
+                box_search_address.Text = browser_url;
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("{0} is not a valid domain name.", browser_url);
+            }
+
+        }
+
+
+        /*************************************************************************
+        * BUTTON EVENT - Go forward
+        *************************************************************************/
+        private void btn_forward_Click(object sender, EventArgs e)
+        {
+            box_WebBrowserChrome.Forward();
+        }
+
+
+
+        /*************************************************************************
+        * BUTTON EVENT - Go Back
+        *************************************************************************/
+        private void btn_back_Click(object sender, EventArgs e)
+        {
+            box_WebBrowserChrome.Back();
+        }
+
+
+
+        /*************************************************************************
+        * BUTTON EVENT - Refresh
+        *************************************************************************/
+        private void btn_refresh_Click(object sender, EventArgs e)
+        {
+            box_WebBrowserChrome.Refresh();
+            box_WebBrowserChrome.Reload();
+        }
+
+
+
+        /*************************************************************************
+        * KEY-DOWN EVENT - Press Enter in textbox
+        *************************************************************************/
+        private void box_search_address_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Navigate unsafely if the user presses enter :
+            if(e.KeyCode.Equals(Keys.Enter))
+            {
+                // Get webpage address :
+                string browser_url = box_search_address.Text.Trim();
+
+
+                // ---------------------------------------------------------------
+                // UNSAFE NAVIGATION
+                // ---------------------------------------------------------------
+                navigate_unsafely(browser_url);
+            }
+        }
+
+
+
+        /*************************************************************************
+        * DELEGATE - Update displayed URL as the webbrowser refreshes, goBack, ...
+        *************************************************************************/
+        private void box_WebBrowserChrome_AddressChanged(object sender, AddressChangedEventArgs e)
+        {            
+            if (this.box_search_address.InvokeRequired)
+            {
+                // If this method is running on a different thread
+                SetTextCallback d = new SetTextCallback(SetText);
+                this.Invoke(d, new object[] { e.Address.ToString() });
+            }
+            else
+            {
+                // It's on the same thread, no need for Invoke
+                this.box_search_address.Text = e.Address.ToString();
+            }
+        }
+
+
+
+
+        /*************************************************************************
+        * DELEGATE - Update UI from another thread
+        *************************************************************************/
+        delegate void SetTextCallback(string text);
+
+
+
+        /*************************************************************************
+        * DELEGATE - Change text of address box
+        *************************************************************************/
+        private void SetText(string text)
+        {
+            this.box_search_address.Text = text;
+        }
+
+
+
+    } // class
+} // namespace
+
+
+
+
+/************************************************************************************************************************************
+* REFERENCES:
+* 
+* https://github.com/cefsharp/CefSharp
+* https://learn.microsoft.com/en-us/dotnet/api/system.globalization.idnmapping.getascii?redirectedfrom=MSDN&view=net-6.0#overloads 
+* https://github.com/cefsharp/CefSharp/wiki/General-Usage#high-dpi-displayssupport
+* https://github.com/cefsharp/CefSharp/issues/1757
+* https://www.codeproject.com/Articles/52752/Updating-Your-Form-from-Another-Thread-without-Cre
+* 
+*************************************************************************************************************************************/
