@@ -49,12 +49,12 @@ namespace VulSimpleBrowser
             // ---------------------------------------------------------------
             // UNSAFE NAVIGATION
             // ---------------------------------------------------------------
-            navigate_unsafely(browser_url);
+            //navigate_unsafely(browser_url);
 
             // ---------------------------------------------------------------
             // SAFE NAVIGATION (PUNY-CODE)
             // ---------------------------------------------------------------
-            //navigate_safely(browser_url);
+            navigate_safely(browser_url);
 
         }
 
@@ -141,7 +141,12 @@ namespace VulSimpleBrowser
                 // ---------------------------------------------------------------
                 // UNSAFE NAVIGATION
                 // ---------------------------------------------------------------
-                navigate_unsafely(browser_url);
+                //navigate_unsafely(browser_url);
+
+                // ---------------------------------------------------------------
+                // SAFE NAVIGATION (PUNY-CODE)
+                // ---------------------------------------------------------------
+                navigate_safely(browser_url);
             }
         }
 
