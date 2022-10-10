@@ -49,12 +49,12 @@ namespace VulSimpleBrowser
             // ---------------------------------------------------------------
             // UNSAFE NAVIGATION
             // ---------------------------------------------------------------
-            navigate_unsafely(browser_url);
+            // navigate_unsafely(browser_url);
 
             // ---------------------------------------------------------------
             // SAFE NAVIGATION (PUNY-CODE)
             // ---------------------------------------------------------------
-            //navigate_safely(browser_url);
+            navigate_safely(browser_url);
 
         }
 
@@ -65,7 +65,18 @@ namespace VulSimpleBrowser
         *************************************************************************/
         private void navigate_unsafely(string browser_url)
         {
-            box_WebBrowserChrome.Load(browser_url);
+            string port = "";
+            if (browser_url.Equals("bankwebsite.com"))
+            {
+                port = ":4400";
+            }
+
+            if (browser_url.Equals("bаnkwebsite.com"))
+            {
+                port = ":4500";
+            }
+
+            box_WebBrowserChrome.Load(browser_url + port);
         }
 
 
@@ -74,9 +85,20 @@ namespace VulSimpleBrowser
         *************************************************************************/
         private void navigate_safely(string browser_url)
         {
+            string port = "";
+            if(browser_url.Equals("bankwebsite.com"))
+            {
+                port = ":4400";
+            }
+
+            if (browser_url.Equals("bаnkwebsite.com"))
+            {
+                port = ":4500";
+            }
+
 
             // Navigate to page :
-            box_WebBrowserChrome.Load(browser_url);
+            box_WebBrowserChrome.Load(browser_url + port);
 
             try
             {
